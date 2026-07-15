@@ -30,3 +30,10 @@ def train_split(credit_dum: pd.DataFrame):
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.25)
     return X_train, X_test, y_train, y_test
 
+def pipeline():
+    log_pip = Pipeline([
+        ('scaler', StandardScaler()),
+        ('classifier', LogisticRegression())
+    ])
+    return log_pip
+

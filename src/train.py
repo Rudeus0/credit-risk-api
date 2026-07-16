@@ -25,9 +25,13 @@ def features(credit: pd.DataFrame)-> pd.DataFrame:
     return credit_dum
 
 def train_split(credit_dum: pd.DataFrame):
-    X = credit_dum.drop(['class'], axis=1)
-    y= credit_dum['class']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.25)
+    X = credit_dum.drop(['class'], axis=1) #Drops the target variable 'class' to create the feature matrix (X).
+    y = credit_dum['class'] # Extracts the target column ('class') for model training
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, random_state=42, test_size=0.25
+        )
+    #Splits the data into training (75%) and testing (25%) sets.
+    #Random_state=42 ensures the split is reproducible across runs.
     return X_train, X_test, y_train, y_test
 
 def pipeline():

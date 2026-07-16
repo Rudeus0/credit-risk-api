@@ -18,15 +18,19 @@ def features(credit: pd.DataFrame)-> pd.DataFrame:
     categorical_cols = credit.select_dtypes(include=["object","str"]).columns.to_list()
     #Stores the names of all categorical (object/string) columns in python list.
         
-    credit_dum = pd.get_dummies(credit, categorical_cols, drop_first= True)
+    credit_dum = pd.get_dummies(credit, columns=categorical_cols, drop_first= True)
     #One-hot encoding categorical columns into binary features and drops
     #The first category from each features to avoid redundant dummy vatiables.
     
     return credit_dum
 
 def train_split(credit_dum: pd.DataFrame):
-    X = credit_dum.drop(['class'], axis=1) #Drops the target variable 'class' to create the feature matrix (X).
-    y = credit_dum['class'] # Extracts the target column ('class') for model training
+    X = credit_dum.drop(['class'], axis=1) 
+    #Drops the target variable 'class' to create the feature matrix (X).
+    
+    y = credit_dum['class']
+    # Extracts the target column ('class') for model training
+    
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, random_state=42, test_size=0.25
         )

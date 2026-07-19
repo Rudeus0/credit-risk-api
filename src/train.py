@@ -1,9 +1,10 @@
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+from pathlib import Path
+import joblib
 
 
 
@@ -44,3 +45,7 @@ def build_pipeline() -> Pipeline:
         ('classifier', LogisticRegression(max_iter=1000,random_state=42))
     ])
 
+def train_model(pipeline: Pipeline, X_train, y_train)-> Pipeline:
+    Pipeline.fit(X_train, y_train)
+    return pipeline
+    

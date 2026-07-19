@@ -38,10 +38,9 @@ def train_split(credit_dum: pd.DataFrame):
     #Random_state=42 ensures the split is reproducible across runs.
     return X_train, X_test, y_train, y_test
 
-def pipeline():
-    log_pip = Pipeline([
+def build_pipeline() -> Pipeline:
+    return Pipeline([
         ('scaler', StandardScaler()),
-        ('classifier', LogisticRegression())
+        ('classifier', LogisticRegression(max_iter=1000,random_state=42))
     ])
-    return log_pip
 

@@ -46,6 +46,7 @@ def build_pipeline() -> Pipeline:
     ])
 
 def train_model(pipeline: Pipeline, X_train, y_train)-> Pipeline:
-    Pipeline.fit(X_train, y_train)
+    pipeline.fit(X_train, y_train)
     return pipeline
     
+de

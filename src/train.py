@@ -8,7 +8,7 @@ import joblib
 
 
 
-def credit()-> pd.DataFrame:
+def load_data()-> pd.DataFrame:
     credit = pd.read_csv("../data/credit_customers.csv")
     return credit
 
@@ -33,7 +33,7 @@ def train_split(credit_dum: pd.DataFrame):
     # Extracts the target column ('class') for model training
     
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, random_state=42, test_size=0.25
+        X, y, random_state=42, test_size=0.20
         )
     #Splits the data into training (75%) and testing (25%) sets.
     #Random_state=42 ensures the split is reproducible across runs.

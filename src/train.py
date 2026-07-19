@@ -49,4 +49,7 @@ def train_model(pipeline: Pipeline, X_train, y_train)-> Pipeline:
     pipeline.fit(X_train, y_train)
     return pipeline
     
-de
+def save_model(pipeline: Pipeline, path: str="models/model.pkl")-> None:
+    Path("models").mkdir(exist_ok = True)
+    joblib.dump(pipeline, path)
+    print(f"model has been saved {path}")

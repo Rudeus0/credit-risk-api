@@ -9,7 +9,7 @@ import joblib
 
 
 def load_data()-> pd.DataFrame:
-    credit = pd.read_csv("../data/credit_customers.csv")
+    credit = pd.read_csv("data/credit_customers.csv")
     return credit
 
 def features(credit: pd.DataFrame)-> pd.DataFrame:
@@ -40,9 +40,13 @@ def train_split(credit_dum: pd.DataFrame):
     return X_train, X_test, y_train, y_test
 
 def build_pipeline() -> Pipeline:
+     # Creates a two-step pipeline: first scale the data, then train the model
+     # Pipeline ensures scaler is always applied before the classifier — no leakage
     return Pipeline([
-        ('scaler', StandardScaler()),
+        ('scaler', StandardScaler()), # Standardizes features to mean=0, std=1
         ('classifier', LogisticRegression(max_iter=1000,random_state=42))
+        # max_iter=1000 — gives model enough iterations to converge
+        # random_state=42 — makes results reproducible across runs
     ])
 
 def train_model(pipeline: Pipeline, X_train, y_train)-> Pipeline:

@@ -50,8 +50,10 @@ def build_pipeline() -> Pipeline:
     ])
 
 def train_model(pipeline: Pipeline, X_train, y_train)-> Pipeline:
+    # fit() learns the patterns from training data
+    # Internally: first fits the scaler on X_train, then trains the classifier
     pipeline.fit(X_train, y_train)
-    return pipeline
+    return pipeline # Returns the trained pipeline for saving or evaluation
     
 def save_model(pipeline: Pipeline, path: str="models/model.pkl")-> None:
     Path("models").mkdir(exist_ok = True)

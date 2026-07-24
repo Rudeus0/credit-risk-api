@@ -1,6 +1,7 @@
 # Virtual environment
 .venv-cred-api/venv/
-env/
+venv
+env
 
 # Python cache
 __pycache__/

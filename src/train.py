@@ -56,6 +56,11 @@ def train_model(pipeline: Pipeline, X_train, y_train)-> Pipeline:
     return pipeline # Returns the trained pipeline for saving or evaluation
     
 def save_model(pipeline: Pipeline, path: str="models/model.pkl")-> None:
+    # Creates the models/ folder if it doesn't exist yet
+    # exist_ok=True means no error if folder already exists
     Path("models").mkdir(exist_ok = True)
+     # Serializes the entire pipeline (scaler + model) into a single .pkl file
+    # joblib is preferred over pickle for scikit-learn objects — faster and safer
     joblib.dump(pipeline, path)
-    print(f"model has been saved {path}")
+    
+    print(f"model has been saved {path}") # Confirms save was successful

@@ -16,20 +16,17 @@ def features(credit: pd.DataFrame)-> pd.DataFrame:
     credit['class'] = credit['class'].map({'good': 0 , 'bad': 1})
     #Converts the target labels ('good', 'bad') into binary numerical values. 
     
-    categorical_cols = credit.select_dtypes(include=["object","str"]).columns.to_list()
-    #Stores the names of all categorical (object/string) columns in python list.
-        
-    credit_dum = pd.get_dummies(credit, columns=categorical_cols, drop_first= True)
-    #One-hot encoding categorical columns into binary features and drops
-    #The first category from each features to avoid redundant dummy vatiables.
+    num_credit = credit.select_dtypes(include=['number']) 
+    # Select only numeric columns — includes 'class' after map()
+    # No encoding needed — API input will match these exact columns
     
-    return credit_dum
+    return num_credit
 
-def train_split(credit_dum: pd.DataFrame):
-    X = credit_dum.drop(['class'], axis=1) 
+def train_split(num_credit: pd.DataFrame):
+    X = num_credit.drop(['class'], axis=1) 
     #Drops the target variable 'class' to create the feature matrix (X).
     
-    y = credit_dum['class']
+    y = num_credit['class']
     # Extracts the target column ('class') for model training
     
     X_train, X_test, y_train, y_test = train_test_split(

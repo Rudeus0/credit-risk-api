@@ -11,9 +11,6 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
-# Data files
-data/
-
 # Saved models
 models/
 

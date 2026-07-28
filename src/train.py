@@ -1,63 +1,70 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
 from pathlib import Path
+
 import joblib
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 
-
-def load_data()-> pd.DataFrame:
+def load_data() -> pd.DataFrame:
     credit = pd.read_csv("data/credit_customers.csv")
     return credit
 
-def features(credit: pd.DataFrame)-> pd.DataFrame:
-    credit['class'] = credit['class'].map({'good': 0 , 'bad': 1})
-    #Converts the target labels ('good', 'bad') into binary numerical values. 
-    
-    num_credit = credit.select_dtypes(include=['number']) 
+
+def features(credit: pd.DataFrame) -> pd.DataFrame:
+    credit["class"] = credit["class"].map({"good": 0, "bad": 1})
+    # Converts the target labels ('good', 'bad') into binary numerical values.
+
+    num_credit = credit.select_dtypes(include=["number"])
     # Select only numeric columns — includes 'class' after map()
     # No encoding needed — API input will match these exact columns
-    
+
     return num_credit
 
+
 def train_split(num_credit: pd.DataFrame):
-    X = num_credit.drop(['class'], axis=1) 
-    #Drops the target variable 'class' to create the feature matrix (X).
-    
-    y = num_credit['class']
+    X = num_credit.drop(["class"], axis=1)
+    # Drops the target variable 'class' to create the feature matrix (X).
+
+    y = num_credit["class"]
     # Extracts the target column ('class') for model training
-    
+
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, random_state=42, test_size=0.20
-        )
-    #Splits the data into training (75%) and testing (25%) sets.
-    #Random_state=42 ensures the split is reproducible across runs.
+    )
+    # Splits the data into training (75%) and testing (25%) sets.
+    # Random_state=42 ensures the split is reproducible across runs.
     return X_train, X_test, y_train, y_test
 
-def build_pipeline() -> Pipeline:
-     # Creates a two-step pipeline: first scale the data, then train the model
-     # Pipeline ensures scaler is always applied before the classifier — no leakage
-    return Pipeline([
-        ('scaler', StandardScaler()), # Standardizes features to mean=0, std=1
-        ('classifier', LogisticRegression(max_iter=1000,random_state=42))
-        # max_iter=1000 — gives model enough iterations to converge
-        # random_state=42 — makes results reproducible across runs
-    ])
 
-def train_model(pipeline: Pipeline, X_train, y_train)-> Pipeline:
+def build_pipeline() -> Pipeline:
+    # Creates a two-step pipeline: first scale the data, then train the model
+    # Pipeline ensures scaler is always applied before the classifier — no leakage
+    return Pipeline(
+        [
+            ("scaler", StandardScaler()),  # Standardizes features to mean=0, std=1
+            ("classifier", LogisticRegression(max_iter=1000, random_state=42)),
+            # max_iter=1000 — gives model enough iterations to converge
+            # random_state=42 — makes results reproducible across runs
+        ]
+    )
+
+
+def train_model(pipeline: Pipeline, X_train, y_train) -> Pipeline:
     # fit() learns the patterns from training data
     # Internally: first fits the scaler on X_train, then trains the classifier
     pipeline.fit(X_train, y_train)
-    return pipeline # Returns the trained pipeline for saving or evaluation
-    
-def save_model(pipeline: Pipeline, path: str="models/model.pkl")-> None:
+    return pipeline  # Returns the trained pipeline for saving or evaluation
+
+
+def save_model(pipeline: Pipeline, path: str = "models/model.pkl") -> None:
     # Creates the models/ folder if it doesn't exist yet
     # exist_ok=True means no error if folder already exists
-    Path("models").mkdir(exist_ok = True)
-     # Serializes the entire pipeline (scaler + model) into a single .pkl file
+    Path("models").mkdir(exist_ok=True)
+    # Serializes the entire pipeline (scaler + model) into a single .pkl file
     # joblib is preferred over pickle for scikit-learn objects — faster and safer
     joblib.dump(pipeline, path)
-    
-    print(f"model has been saved {path}") # Confirms save was successful
+
+    print(f"model has been saved {path}")  # Confirms save was successful
